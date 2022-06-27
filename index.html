@@ -5,23 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    
 </head>
 <body>
     <div class="bloc">
         <div class="container">
             <h1>Конвертер валют</h1>
             <div class="input-group">
-                <input type="text" aria-label="First name" class="form-control">
-                <select name="" id="">
-                    <option value=""></option>
+                <label for="num">Купить сумму:</label><input type="text" id="num">
+
+                <select name="valList" id="valList">
+                    <option value="">Выбрать валюту</option>
                 </select>
-                <input type="text" aria-label="First name" class="form-control">
-                <select name="" id="">
-                    <option value=""></option>
+
+                <select name="valList-1" id="valList-1">
+                    <option value="">Выбрать валюту</option>
                 </select>
-               
+
+                <label for="num">Стоимость:</label><input type="text" id="convertResult">
+ 
             </div>
         </div>
         
@@ -31,5 +35,39 @@
 </html>
 
 <script>
+     $.ajax({
+        type: "GET",
+        url: "https://www.cbr-xml-daily.ru/daily_json.js",
+        success: function(response) {
+            let jsonObj = JSON.parse(response);
+
+            $.each(jsonObj["Valute"], function(indexInArray, valueOfElement) {
+                let nowValHtml = `<option value="` + indexInArray + `">` + indexInArray + `</option>`
+                $("#valList").append(nowValHtml)
+            });
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "https://www.cbr-xml-daily.ru/daily_json.js",
+        success: function(response) {
+            let jsonObj = JSON.parse(response);
+
+            $.each(jsonObj["Valute"], function(indexInArray, valueOfElement) {
+                let nowValHtml = `<option value="` + indexInArray + `">` + indexInArray + `</option>`
+                $("#valList-1").append(nowValHtml)
+            });
+        }
+    });
+    $("#convertResult").click(function(e) {
+                let nowVal = $("#valList-1").val()
+                let nowValRate = jsonObj["Valute"][nowVal]["Value"]
+                let countVal = $("#convertResult").val()
+
+                $("#convertResult").text(countVal + nowVal + " = " +
+                    Math.round(nowValRate * countVal))
+            });       
+
 
 </script>
