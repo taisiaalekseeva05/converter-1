@@ -65,6 +65,10 @@
 	this.value = this.value.replace(/[^0-9\.\,]/g, '');
 });
 
+$(document).on("change", "select", function() {
+    console.log($(this).val())
+});
+
     $("#convertResult").click(function(e) {
                 let nowVal = $("#valList-1").val()
                 let nowValRate = jsonObj["Valute"][nowVal]["Value"]
