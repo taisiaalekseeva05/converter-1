@@ -14,7 +14,7 @@
         <div class="container">
             <h1>Конвертер валют</h1>
             <div class="input-group">
-                <label for="num">Купить сумму:</label><input type="text" id="num">
+                <label for="num">Купить сумму:</label><input type="text" class="input-number" placeholder="">
 
                 <select name="valList" id="valList">
                     <option value="">Выбрать валюту</option>
@@ -24,7 +24,7 @@
                     <option value="">Выбрать валюту</option>
                 </select>
 
-                <label for="num">Стоимость:</label><input type="text" id="convertResult">
+                <label for="num">Стоимость:</label><input type="text" class="input-number" placeholder="" id="convertResult">
  
             </div>
         </div>
@@ -60,6 +60,11 @@
             });
         }
     });
+
+    $('body').on('input', '.input-number', function(){
+	this.value = this.value.replace(/[^0-9\.\,]/g, '');
+});
+
     $("#convertResult").click(function(e) {
                 let nowVal = $("#valList-1").val()
                 let nowValRate = jsonObj["Valute"][nowVal]["Value"]
