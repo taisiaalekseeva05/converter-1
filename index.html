@@ -14,17 +14,18 @@
         <div class="container">
             <h1>Конвертер валют</h1>
             <div class="input-group">
-                <label for="num">Купить сумму:</label><input type="text" class="input-number" placeholder="">
+                <input type="number" id="countInput" placeholder="0">
 
-                <select name="valList" id="valList">
-                    <option value="">Выбрать валюту</option>
+                <select name="" id="valList" class="valList">
+                    <option selected value="RUB">RUB</option>
+                </select>
+                <input type="number" id="resultText" placeholder="0" >
+
+                <select name="" id="valList-1" class="valList">
+                    <option selected value="RUB">RUB</option>
                 </select>
 
-                <select name="valList-1" id="valList-1">
-                    <option value="">Выбрать валюту</option>
-                </select>
-
-                <label for="num">Стоимость:</label><input type="text" class="input-number" placeholder="" id="convertResult">
+               
  
             </div>
         </div>
@@ -45,34 +46,34 @@
                 let nowValHtml = `<option value="` + indexInArray + `">` + indexInArray + `</option>`
                 $("#valList").append(nowValHtml)
             });
-        }
-    });
 
-    $.ajax({
-        type: "GET",
-        url: "https://www.cbr-xml-daily.ru/daily_json.js",
-        success: function(response) {
-            let jsonObj = JSON.parse(response);
+
+            $("#countInput").on('input',function() {
+                this.value = this.value.replace(/[^0-9\.\,]/g, '');
+                let nowVal = $("#valList").val()
+                let nowValRate = jsonObj["Valute"][nowVal]["Value"]
+                let countVal = $("#countInput").val() 
+
+                $("#resultText").val((nowValRate * countVal).toFixed(2))
+            });
+
+            $("#valList").on('change', function () {
+                alert('change сработал')
+        
+                $('#valList').val(this.value);
+            });
 
             $.each(jsonObj["Valute"], function(indexInArray, valueOfElement) {
                 let nowValHtml = `<option value="` + indexInArray + `">` + indexInArray + `</option>`
                 $("#valList-1").append(nowValHtml)
             });
+
+
+            $("#valList-1").on('change', function () {
+                alert('change сработал')
+        
+                $('#valList-1').val(this.value);
+            });
         }
-    });
-
-    $('body').on('input', '.input-number', function(){
-	this.value = this.value.replace(/[^0-9\.\,]/g, '');
-});
-
-    $("#convertResult").click(function(e) {
-                let nowVal = $("#valList-1").val()
-                let nowValRate = jsonObj["Valute"][nowVal]["Value"]
-                let countVal = $("#convertResult").val()
-
-                $("#convertResult").text(countVal + nowVal + " = " +
-                    Math.round(nowValRate * countVal))
-            });       
-
-
+    });    
 </script>
